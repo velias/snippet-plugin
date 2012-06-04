@@ -10,7 +10,7 @@
 
         #applyDecorator ("root")
             #decoratorParam ("context" "spacecontentpanel")
-            #decoratorParam ("selection" "snippeterrors")
+            #decoratorParam ("selection" "advanced.snippeterrorslink")
             #decoratorParam ("title" $action.getText('snippeterrors.title'))
             #decoratorParam ("selectedTab" "advanced")
             #decoratorParam("helper" $action.helper)
