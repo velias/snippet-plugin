@@ -2,6 +2,7 @@
     <head>
 		<title>$action.getText("configureSnippet.title")</title>
         <!--<meta name="help-path" content="/templates/snippet/config/help.vm"/>-->
+        <meta name="selection" content="admin.snippetconfig"/>
     </head>
     <body>
 

@@ -68,5 +68,10 @@
             <link>/images/icons/trafficlight_red_16.png</link>
         </icon>
     </web-item>
+    
+    <web-item key="admin.snippetconfig" name="Snippet Plugin configuration" section="system.admin/configuration" weight="500">
+        <label key="Snippet Plugin Configuration" />
+        <link>/admin/plugins/snippet/configure.action</link>
+    </web-item>
 
 </atlassian-plugin>
