@@ -5,14 +5,14 @@
 
     #applyDecorator("root")
         #decoratorParam("helper" $action.helper)
-        #decoratorParam("context" "space-administration")
-        #decoratorParam("mode"  "view-space-administration")
+        #decoratorParam("context" "space-operations")
+        #decoratorParam("mode"  "view-space-operations")
 
         #applyDecorator ("root")
-            #decoratorParam ("context" "spaceadminpanel")
+            #decoratorParam ("context" "spacecontentpanel")
             #decoratorParam ("selection" "snippeterrors")
             #decoratorParam ("title" $action.getText('snippeterrors.title'))
-            #decoratorParam ("selectedTab" "admin")
+            #decoratorParam ("selectedTab" "advanced")
             #decoratorParam("helper" $action.helper)
 
             #parse ( "/template/includes/actionerrors.vm" )
