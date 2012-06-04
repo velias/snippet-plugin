@@ -1,0 +1,11 @@
+$msg:
+
+Page: $baseUrl + pageUrl
+URL:  $snippetUrl
+ID:   $snippetId
+#if ($exception)
+Exception: $exception.message
+#foreach ($frame in $exception.stackTrace)
+  $frame
+#end
+#end

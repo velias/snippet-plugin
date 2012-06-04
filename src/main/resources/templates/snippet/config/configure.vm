@@ -1,0 +1,134 @@
+<html>
+    <head>
+		<title>$action.getText("configureSnippet.title")</title>
+        <!--<meta name="help-path" content="/templates/snippet/config/help.vm"/>-->
+    </head>
+    <body>
+
+        <script language="javascript">
+            function toggleCredentials(checked) {
+                display = (checked ? '' : 'none');
+                document.getElementById("urlUsername").style.display = display;
+                document.getElementById("urlPassword").style.display = display;
+            }
+        </script>
+        #if($actionMessages)
+            #foreach ($message in $actionMessages)
+            <div class="noteMacro" style="padding:5px;">
+                $message
+            </div>
+            #end
+        #end
+        #parse ( "/template/includes/actionerrors.vm" )
+        <form method="POST" name="configuresnippet" action="doconfigure.action">
+
+            <a name="general"></a>
+            <div class="steptitle topPadding">$action.getText("configureSnippet.general.title")</div>
+            <div class="smalltext">$action.getText("configureSnippet.description")</div>
+            <table class="grid" width="100%">
+                #bodytag( Component "label='configureSnippet.toggle'" "name='toggle'" "value=toggle" "theme='custom'" "template='onofflist.vm'") #param ("cssClassForLabel" "label") #end
+                #tag( TextField "label='configureSnippet.cacheTimeout'" "name='cacheTimeout'" )
+            </table>
+
+
+            <div class="steptitle topPadding">$action.getText('configureSnippet.urlPrefixes.title')</div>
+            <div class="stepdesc">
+
+                $action.getText('configureSnippet.urlPrefixes.description')
+                <div class="errorBox">
+                    <span class="errorMessage">$action.getText("configureSnippet.security.title")</span>
+                    $action.getText('configureSnippet.security.description')
+                </div>
+            </div>
+            <table class="grid" width="100%">
+                <th colspan="2"><b>$action.getText("configureSnippet.urlPrefixes.add")</b></th>
+                <tr>
+                    <td class="label" align="right">$action.getText("configureSnippet.urlPrefixes.prefix.label") <br />
+                        <span class="smalltext">$action.getText("configureSnippet.urlPrefixes.prefix.example")</span></td>
+                    <td><input type="text" name="prefix" value="$!generalUtil.htmlEncode( $prefix )" size="50"></td>
+                </tr>
+                <tr>
+                    <td class="label" align="right">$action.getText("configureSnippet.urlPrefixes.url.label") <br />
+                        <span class="smalltext">$action.getText("configureSnippet.urlPrefixes.url.example")</span></td>
+                    <td><input type="text" name="url" value="$!url" size="70"></td>
+                </tr>
+                <tr>
+                    <td class="label" align="right">$action.getText("configureSnippet.urlPrefixes.useCredentials.label") </td>
+                    <td><input type="checkbox" name="useCredentials" value="true" onchange="toggleCredentials(this.checked)"/></td>
+                </tr>
+                <tr id="urlUsername" style="display:none">
+                    <td class="label" align="right">$action.getText("configureSnippet.urlPrefixes.username.label") </td>
+                    <td><input type="text" name="credentials.username" value="" size="70"></td>
+                </tr>
+                <tr id="urlPassword" style="display:none">
+                    <td class="label" align="right">$action.getText("configureSnippet.urlPrefixes.password.label")
+                    <td><input type="password" name="credentials.password" value="" size="15"></td>
+                </tr>
+                #tag( Submit "name='addUrlPrefix'" "value='Add'" "align='center'" )
+            </table>
+
+            <table class="grid" width="100%">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>$action.getText("configureSnippet.urlPrefixes.prefix")</th>
+                    <th>$action.getText("configureSnippet.urlPrefixes.url")</th>
+                </tr>
+                #foreach ($prefix in $action.getUrlPrefixes().keySet())
+                    <tr>
+                        <td><input type="checkbox" name="prefixesToRemove" value="$generalUtil.htmlEncode($prefix)"></td>
+                        <td>
+                            $generalUtil.htmlEncode($prefix)
+                            <input type="hidden" name="urlPrefixes['$generalUtil.htmlEncode($prefix)']" value="$generalUtil.htmlEncode( $action.getUrlPrefixes().get($prefix) )" />
+                        </td>
+                        <td>$generalUtil.htmlEncode( $action.getUrlPrefixes().get($prefix) )</td>
+                    </tr>
+                #end
+                <tr>
+                    <td colspan="3">
+                        #tag( Submit "name='removeUrlPrefix'" "value=getText('remove.name')" "theme='notable'" )
+                    </td>
+                </tr>
+            </table>
+
+            <a name="clearSnippetCache"></a>
+            <div class="steptitle topPadding">$action.getText("configureSnippet.clearSnippetCache.title")</div>
+            <div class="smalltext">$action.getText("configureSnippet.clearSnippetCache.description")</div>
+            <table class="grid" width="100%">
+                #tag( Submit "name='clearSnippetCache'" "value=getText('configureSnippet.clearSnippetCache.name')" "theme='notable'" )
+            </table>
+
+            <a name="clearErrors"></a>
+            <div class="steptitle topPadding">$action.getText("configureSnippet.clearErrors.title")</div>
+            <div class="smalltext">$action.getText("configureSnippet.clearErrors.description")</div>
+            <table class="grid" width="100%">
+                #tag( Submit "name='clearErrors'" "value=getText('configureSnippet.clearErrors.name')" "theme='notable'" )
+            </table>
+
+            <!--
+            <div class="steptitle topPadding">$action.getText('configureSnippet.notifications.title')</div>
+            <div class="stepdesc">
+
+                $action.getText('configureSnippet.notifications.description')
+            </div>
+            <table class="grid" width="100%">
+                #tag( TextField "label='configureSnippet.notifications.email'" "name='notificationEmail'" )
+                #tag( Textarea "label='configureSnippet.notifications.subject'" "name='emailSubjectTemplate'" "rows=2" "cols=50" )
+                #tag( Textarea "label='configureSnippet.notifications.body'" "name='emailBodyTemplate'" "rows=8" "cols=50" )
+            </table>
+            -->
+            <p>
+            <table width="100%">
+                <tr>
+                    <td colspan="2" align="center">
+                        #tag( Submit "id=confirm" "name='confirm'" "value='update.name'" "theme='notable'" )
+                        #tag( Submit "id=cancel" "name='cancel'" "value='cancel.name'" "theme='notable'" )
+                    </td>
+                </tr>
+            </table>
+            </p>
+
+       </form>
+
+        #parse ( "/admin/admin-breadcrumbs.vm" )
+	</body>
+</html>

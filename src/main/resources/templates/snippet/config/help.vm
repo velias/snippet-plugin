@@ -1,0 +1,19 @@
+<!--<p>
+    $action.getText('configureSnippet.emailTemplate.description')
+</p>
+<ul>
+    <li><strong><code>$pageUrl</code></strong> - $action.getText('configureSnippet.emailTemplate.pageUrl')</li>
+    <li><strong><code>$snippetUrl</code></strong> - $action.getText('configureSnippet.emailTemplate.snippetUrl')</li>
+    <li><strong><code>$snippetId</code></strong> - $action.getText('configureSnippet.emailTemplate.snippetId')</li>
+    <li><strong><code>$msg</code></strong> - $action.getText('configureSnippet.emailTemplate.msg')</li>
+    <li><strong><code>$exception</code></strong> - $action.getText('configureSnippet.emailTemplate.exception')</li>
+    <li><strong><code>$baseUrl</code></strong> - $action.getText('configureSnippet.emailTemplate.baseUrl')</li>
+</ul>
+
+
+<div class="errorBox">
+<span class="errorMessage">$action.getText("configureSnippet.security.title")</span>
+$action.getText('configureSnippet.security.description')
+</div>
+-->
+

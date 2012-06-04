@@ -1,0 +1,86 @@
+<html>
+	<head>
+		<title>$action.getText('snippeterrors.title')</title>
+    </head>
+
+    #applyDecorator("root")
+        #decoratorParam("helper" $action.helper)
+        #decoratorParam("context" "space-administration")
+        #decoratorParam("mode"  "view-space-administration")
+
+        #applyDecorator ("root")
+            #decoratorParam ("context" "spaceadminpanel")
+            #decoratorParam ("selection" "snippeterrors")
+            #decoratorParam ("title" $action.getText('snippeterrors.title'))
+            #decoratorParam ("selectedTab" "admin")
+            #decoratorParam("helper" $action.helper)
+
+            #parse ( "/template/includes/actionerrors.vm" )
+            #if($actionMessages)
+                #foreach ($message in $actionMessages)
+                <div class="noteMacro" style="padding:5px;">
+                    $message
+                </div>
+                #end
+            #end
+            <table border="0" width="100%">
+            <tr>
+                <td width="100%">
+                <p> </p>
+                <p>
+                $action.getText("snippeterrors.description")
+                </p>
+
+                <p>
+                <img src="$req.contextPath/images/icons/bullet_creme.gif" height="8" width="8" border="0" alt=""/>
+                <a href="?clearSnippetErrors=true&amp;key=$generalUtil.urlEncode( $key )">$action.getText("snippeterrors.clear")</a>
+                </p>
+
+
+                    <table width="100%" cellspacing="1" class="tableview">
+                        <tr>
+                            <th width="15%">$action.getText("snippeterrors.pageUrl")</th>
+                            <th width="30%">$action.getText("snippeterrors.snippetUrl")</th>
+                            <th width="10%">$action.getText("snippeterrors.snippetId")</th>
+                            <th width="30%">$action.getText("snippeterrors.message")</th>
+                            <th width="15%">$action.getText("snippeterrors.timestamp")</th>
+                        </tr>
+                        #set ($errors = $action.snippetErrors)
+
+                        #if( !$$errors) || $$errors.size()==0 )
+                            <td colspan="5">
+                                $action.getText("snippeterrors.noerrors")
+                            </td>
+                        #else
+                            #foreach( $err in $errors)
+                            <tr onmouseover="rowHover(this)">
+                                <td>
+                                    #if ($err.page)
+                                        #contentLink($err.page)
+                                    #else
+                                        $action.getText("snippeterrors.unknownPage")
+                                    #end
+                                </td>
+                                <td>
+                                    <a href="$err.snippetUrl">$err.snippetUrl</a>
+                                </td>
+                                <td>
+                                    $err.snippetId
+                                </td>
+                                <td>
+                                    $err.message
+                                </td>
+                                <td>
+                                        $err.formattedTimestamp
+                                </td>
+                            </tr>
+                            #end
+                        #end
+                    </table>
+                </td>
+            </tr>
+            </table>
+
+        #end
+	#end
+</html>

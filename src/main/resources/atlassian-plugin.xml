@@ -1,0 +1,61 @@
+<atlassian-plugin key="com.atlassian.confluence.extra.snippet" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>Snippet Plugin</description>
+        <version>${project.version}</version>
+        <vendor name="Atlassian Pty Ltd" url="http://www.atlassian.com"/>
+        <param name="configure.url">/admin/plugins/snippet/configure.action</param>
+    </plugin-info>
+
+    <resource type="i18n" name="bundle" location="templates.snippet.i18n"/>
+    <component name='snippetManager' class='com.atlassian.confluence.extra.snippet.DefaultSnippetManager' key='snippetManager'/>
+    <component name='snippetErrorManager' class='com.atlassian.confluence.extra.snippet.DefaultSnippetErrorManager' key='snippetErrorManager'/>
+
+    <macro name='snippet' class='com.atlassian.confluence.extra.snippet.SnippetMacro' key='snippet' >
+        <description>Macro that gets a snippet of the content from a URL</description>
+    </macro>
+
+    <xwork name="snippetaction" key="snippetaction">
+        <package name="snippet" extends="default" namespace="/plugins/snippet">
+            <default-interceptor-ref name="defaultStack" />
+
+            <action name="clearCache"
+                class="com.atlassian.confluence.extra.snippet.ClearCacheAction">
+                <result name="success" type="redirect">${redirect}</result>
+            </action>
+
+
+        </package>
+        <package name="snippeterrors" extends="default" namespace="/spaces">
+            <default-interceptor-ref name="defaultStack" />
+
+            <action name="snippeterrors"
+                class="com.atlassian.confluence.extra.snippet.SnippetErrorsAction">
+                <result name="success" type="velocity">/templates/snippet/snippeterrors.vm</result>
+            </action>
+
+
+        </package>
+        <package name="snippet-config" extends="default" namespace="/admin/plugins/snippet">
+            <default-interceptor-ref name="defaultStack"/>
+            <action name="configure" class="com.atlassian.confluence.extra.snippet.config.ConfigureSnippetAction">
+                <result name="input" type="velocity">/templates/snippet/config/configure.vm</result>
+                <result name="success" type="velocity">/templates/snippet/config/configure.vm</result>
+            </action>
+            <action name="doconfigure" class="com.atlassian.confluence.extra.snippet.config.ConfigureSnippetAction" method="save">
+                <interceptor-ref name="validatingStack"/>
+                <result name="input" type="velocity">/templates/snippet/config/configure.vm</result>
+                <result name="cancel" type="redirect">/admin/plugins.action?pluginKey=com.atlassian.confluence.extra.snippet</result>
+                <result name="success" type="velocity">/templates/snippet/config/configure.vm</result>
+            </action>
+        </package>
+    </xwork>
+
+    <web-item key="advanced.snippeterrorslink" name="List Snippet Errors" section="system.space.advanced/advanced" weight="100">
+        <label key="Snippet Errors" />
+        <link>/spaces/snippeterrors.action?key=$helper.spaceKey</link>
+        <icon height="16" width="16">
+            <link>/images/icons/trafficlight_red_16.png</link>
+        </icon>
+    </web-item>
+
+</atlassian-plugin>
