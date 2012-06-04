@@ -96,6 +96,8 @@ public class SnippetReader {
             {
                 // TODO: maybe we should be doing some connection pooling here
                 HttpClient httpClient = new HttpClient();
+                httpClient.getParams().setConnectionManagerTimeout(5000);
+                httpClient.getParams().setSoTimeout(5000);
                 if (username != null)
                     httpClient.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
 
