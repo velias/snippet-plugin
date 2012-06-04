@@ -12,6 +12,17 @@
 
     <macro name='snippet' class='com.atlassian.confluence.extra.snippet.SnippetMacro' key='snippet' >
         <description>Macro that gets a snippet of the content from a URL</description>
+        <category name="external-content"/>
+        <parameters>
+          <parameter name="url" type="string" required="true"/>
+          <parameter name="title" type="string" required="true"/>          
+          <parameter name="lang" type="string" />
+          <parameter name="id" type="string" />
+          <parameter name="start" type="string" />
+          <parameter name="end" type="string" />
+          <parameter name="linenumbers" type="boolean" />
+          <parameter name="javadoc" type="boolean" />
+        </parameters>
     </macro>
 
     <xwork name="snippetaction" key="snippetaction">

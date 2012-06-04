@@ -6,3 +6,4 @@ Contains patches for some problems reported in https://studio.plugins.atlassian.
 
 2.1.4.1 - changes against original 2.1.4 version
 - SNIP-24 - patched IndexOutOfBoundsException when error queue gets full
+- SNIP-28 - Improve snippet macro definition to show parameters in Macro insert/edit dialog
