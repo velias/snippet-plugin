@@ -35,6 +35,8 @@ public class SnippetReader {
     private final String password;
     private static final Pattern LEADING_WHITE = Pattern.compile("^(\\s*)\\S.*");
     private static final Protocol MY_HTTPS = new Protocol("https", new EasySSLProtocolSocketFactory(), 443);
+    
+    private static final int HTTP_TIMEOUT = 2000;
 
     private static final String START_TOKEN = "START SNIPPET";
     private static final String END_TOKEN = "END SNIPPET";
@@ -96,8 +98,8 @@ public class SnippetReader {
             {
                 // TODO: maybe we should be doing some connection pooling here
                 HttpClient httpClient = new HttpClient();
-                httpClient.getParams().setConnectionManagerTimeout(5000);
-                httpClient.getParams().setSoTimeout(5000);
+                httpClient.getParams().setConnectionManagerTimeout(HTTP_TIMEOUT);
+                httpClient.getParams().setSoTimeout(HTTP_TIMEOUT);
                 if (username != null)
                     httpClient.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
 
