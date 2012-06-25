@@ -65,10 +65,11 @@ public class DefaultSnippetErrorManager implements SnippetErrorManager {
 
   public void add(SnippetError error) {
     List<String> errors = retrieveErrors(error.getSpaceKey());
-    errors.add(0, error.toString());
-    if (errors.size() >= QUEUE_SIZE)
-      errors.remove(QUEUE_SIZE - 1);
-
-    saveErrors(error.getSpaceKey(), errors);
+    if (!errors.contains(error)) {
+      errors.add(0, error.toString());
+      if (errors.size() >= QUEUE_SIZE)
+        errors.remove(QUEUE_SIZE - 1);
+      saveErrors(error.getSpaceKey(), errors);
+    }
   }
 }
