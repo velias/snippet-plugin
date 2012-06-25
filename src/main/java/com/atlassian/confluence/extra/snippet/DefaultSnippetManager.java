@@ -21,7 +21,7 @@ public class DefaultSnippetManager implements SnippetManager
     private final Map<String, Long> timeCached = new HashMap<String, Long>();
 
     private static final long EXCEPTION_CACHE_TIMEOUT = 5l * 60l * 1000l;
-    private final Map<String, IOException> cacheException = new HashMap<String, IOException>();
+    private final Map<String, CachedIOException> cacheException = new HashMap<String, CachedIOException>();
     private final Map<String, Long> timeCachedException = new HashMap<String, Long>();
     
 
@@ -38,7 +38,7 @@ public class DefaultSnippetManager implements SnippetManager
         if (result == null)
         {
           
-          IOException e = getCachedException(url);
+          CachedIOException e = getCachedException(url);
           if (e != null){
             if (log.isDebugEnabled())
               log.debug("Exception found in cache for snippet url: " + url + ". Exception message: " + e.getMessage());
@@ -81,7 +81,7 @@ public class DefaultSnippetManager implements SnippetManager
     }
 
     
-    public IOException getCachedException(URL url)
+    public CachedIOException getCachedException(URL url)
     {
        String globalId = url.toString();
        if (isCacheTimedoutException(globalId))
@@ -99,7 +99,7 @@ public class DefaultSnippetManager implements SnippetManager
         if (log.isDebugEnabled())
           log.debug("Go to cache Exception for snippet url: " + url + ". Exception message: " + e.getMessage());
         String globalId = url.toString();
-        cacheException.put(globalId, e);
+        cacheException.put(globalId, new CachedIOException(e));
         timeCachedException.put(globalId, System.currentTimeMillis());
     }
 

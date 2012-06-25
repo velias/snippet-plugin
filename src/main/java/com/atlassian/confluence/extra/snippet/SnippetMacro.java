@@ -214,14 +214,15 @@ public class SnippetMacro extends BaseMacro
                 return msg;
             }
         } catch (Exception e) {
-            StringBuffer sb = new StringBuffer();
-            sb.append(e.getMessage());
-            StackTraceElement[] frames = e.getStackTrace();
-            if (frames != null && frames.length > 0)
-                sb.append(" at ").append(frames[0].getClassName()).append(":").append(frames[0].getLineNumber());
-
-            snippetErrorManager.add(new SnippetError(pageContext.getSpaceKey(), contentTitle , url.toString(), id, sb.toString()));
-
+            if (!(e instanceof CachedIOException)){
+              StringBuffer sb = new StringBuffer();
+              sb.append(e.getMessage());
+              StackTraceElement[] frames = e.getStackTrace();
+              if (frames != null && frames.length > 0)
+                  sb.append(" at ").append(frames[0].getClassName()).append(":").append(frames[0].getLineNumber());
+  
+              snippetErrorManager.add(new SnippetError(pageContext.getSpaceKey(), contentTitle , url.toString(), id, sb.toString()));
+            }
             return "An error occurred: " + e.getMessage() + ". The error has been recorded.";
         }
     }
