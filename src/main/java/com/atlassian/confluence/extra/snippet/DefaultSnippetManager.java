@@ -20,6 +20,11 @@ public class DefaultSnippetManager implements SnippetManager
     private final Map<String, Snippet> cache = new HashMap<String, Snippet>();
     private final Map<String, Long> timeCached = new HashMap<String, Long>();
 
+    private static final long EXCEPTION_CACHE_TIMEOUT = 5l * 60l * 1000l;
+    private final Map<String, IOException> cacheException = new HashMap<String, IOException>();
+    private final Map<String, Long> timeCachedException = new HashMap<String, Long>();
+    
+
     private BandanaManager bandanaManager;
     private Map<String, Object> cachedSettings = null;
     private long cachedSettingsExpiry;
@@ -32,13 +37,29 @@ public class DefaultSnippetManager implements SnippetManager
         Snippet result = getCachedSnippet(url, id);
         if (result == null)
         {
-            SnippetReader reader = null;
-            if (credentials != null)
-                reader = new SnippetReader(url, credentials.getUsername(), credentials.getPassword());
-            else
-                reader = new SnippetReader(url);
-            result = reader.readSnippet(id);
-            cacheSnippet(url, id, result);
+          
+          IOException e = getCachedException(url);
+          if (e != null){
+            if (log.isDebugEnabled())
+              log.debug("Exception found in cache for snippet url: " + url + ". Exception message: " + e.getMessage());
+           throw e; 
+          } else {
+            try{
+              SnippetReader reader = null;
+              if (credentials != null)
+                  reader = new SnippetReader(url, credentials.getUsername(), credentials.getPassword());
+              else
+                  reader = new SnippetReader(url);
+              
+              if (log.isDebugEnabled())
+                log.debug("Go to read snippet from url: " + url);
+              result = reader.readSnippet(id);
+              cacheSnippet(url, id, result);
+            } catch (IOException ex){
+              cacheException(url, ex);
+              throw ex;
+            }
+          }
         }
 
         return result;
@@ -59,6 +80,30 @@ public class DefaultSnippetManager implements SnippetManager
         timeCached.put(globalSnippetId(url, id), System.currentTimeMillis());
     }
 
+    
+    public IOException getCachedException(URL url)
+    {
+       String globalId = url.toString();
+       if (isCacheTimedoutException(globalId))
+       {
+         if (log.isDebugEnabled())
+           log.debug("Timed out cached Exception for snippet url: " + url + ". Go to remove it from cache.");
+
+           removeFromCacheException(globalId);
+       }
+       return cacheException.get(globalId);
+    }
+
+    public void cacheException(URL url, IOException e)
+    {
+        if (log.isDebugEnabled())
+          log.debug("Go to cache Exception for snippet url: " + url + ". Exception message: " + e.getMessage());
+        String globalId = url.toString();
+        cacheException.put(globalId, e);
+        timeCachedException.put(globalId, System.currentTimeMillis());
+    }
+
+    
     public String cleanupJavadoc(String msg) {
         return msg.replaceAll("\\{\\@link ([^ \\}]+)\\}", "$1");
     }
@@ -83,11 +128,26 @@ public class DefaultSnippetManager implements SnippetManager
         timeCached.remove(globalId);
         cache.remove(globalId);
     }
+    
+    private boolean isCacheTimedoutException(String globalId)
+    {
+        long curTimeCached = timeCachedException.containsKey(globalId) ? timeCachedException.get(globalId) : 0;
+        long timeInCache = System.currentTimeMillis() - curTimeCached;
+        return timeInCache >= EXCEPTION_CACHE_TIMEOUT;
+    }
+
+    public void removeFromCacheException(String globalId)
+    {
+        timeCachedException.remove(globalId);
+        cacheException.remove(globalId);
+    }
 
     public void clearCache()
     {
         timeCached.clear();
         cache.clear();
+        timeCachedException.clear();
+        cacheException.clear();
     }
 
     private String globalSnippetId(URL url, String id)

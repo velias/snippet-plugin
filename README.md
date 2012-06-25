@@ -5,7 +5,9 @@ This is clone of https://marketplace.atlassian.com/plugins/com.atlassian.conflue
 Contains patches for some problems reported in https://studio.plugins.atlassian.com/browse/SNIP but not solved yet.
 
 2.1.4.2
-- changed handling for "Snippet Errors" list - if some concrete error is already in list, it is not added to the list again (every add means DB write, so this decreases DB writes too). As side effect this mean there is date and time of first error occurrence, no of last. 
+- changed handling for "Snippet Errors" list - if some concrete error is already in list, it is not added to the list again. Every add means DB write, so this decreases DB writes for same errors. As side effect there is date and time of first error occurrence, no of last!
+- cache implemented for snippet content retrieving errors. So if snippet content http read fails, then it is suspended for 5 minutes (same error is shown to users whole 5 minutes).  
+- both "connection" and "socket read" timeouts decreased to 2 seconds
 
 2.1.4.1 - changes against original 2.1.4 version
 - SNIP-24 - patched IndexOutOfBoundsException when error queue gets full

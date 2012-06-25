@@ -62,6 +62,17 @@ public class SnippetError
             sb.append(timestamp.getTime()).append("|");
         return sb.toString();
     }
+    
+    public String toStringNoTimestamp()
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(spaceKey).append("|");
+        sb.append(pageTitle).append("|");
+        sb.append(snippetUrl).append("|");
+        sb.append(snippetId).append("|");
+        sb.append(message).append("|");
+        return sb.toString();
+    }
 
     public boolean equals(Object o)
     {
