@@ -36,7 +36,7 @@ public class SnippetReader {
     private static final Pattern LEADING_WHITE = Pattern.compile("^(\\s*)\\S.*");
     private static final Protocol MY_HTTPS = new Protocol("https", new EasySSLProtocolSocketFactory(), 443);
     
-    private static final int HTTP_TIMEOUT = 2000;
+    private static final int HTTP_TIMEOUT = 3000;
 
     private static final String START_TOKEN = "START SNIPPET";
     private static final String END_TOKEN = "END SNIPPET";

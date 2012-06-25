@@ -7,7 +7,7 @@ Contains patches for some problems reported in https://studio.plugins.atlassian.
 2.1.4.2
 - changed handling for "Snippet Errors" list - if some concrete error is already in list, it is not added to the list again. Every add means DB write, so this decreases DB writes for same errors. As side effect there is date and time of first error occurrence, no of last!
 - cache implemented for snippet content retrieving errors. So if snippet content http read fails, then it is suspended for 5 minutes (same error is shown to users whole 5 minutes).  
-- both "connection" and "socket read" timeouts decreased to 2 seconds
+- both "connection" and "socket read" timeouts decreased to 3 seconds
 
 2.1.4.1 - changes against original 2.1.4 version
 - SNIP-24 - patched IndexOutOfBoundsException when error queue gets full
