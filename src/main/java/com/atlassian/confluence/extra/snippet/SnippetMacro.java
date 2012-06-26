@@ -223,7 +223,7 @@ public class SnippetMacro extends BaseMacro
   
               snippetErrorManager.add(new SnippetError(pageContext.getSpaceKey(), contentTitle , url.toString(), id, sb.toString()));
             }
-            return "An error occurred: " + e.getMessage() + ". The error has been recorded.";
+            return "<div style='color:red; margin: 10px 0;'><strong>Code Snippet error:</strong> " + e.getMessage() + ".</div>";
         }
     }
 
